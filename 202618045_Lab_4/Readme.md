@@ -15,6 +15,14 @@ Kaggle "New York City Airbnb Open Data" (`AB_NYC_2019.csv`) — ~48,900 listings
 - Engineered features: `days_since_last_review` (with a sentinel value for never-reviewed listings), `never_reviewed` flag, `distance_to_center` (from latitude/longitude), `neighbourhood_freq` (frequency encoding for 221 unique neighbourhoods)
 - One-hot encoded `neighbourhood_group` (borough) and `room_type`, with `drop_first=True` to avoid multicollinearity
 
+### Price Distribution Before vs. After Log Transform
+
+| Raw Price | Log-Transformed Price |
+|---|---|
+| ![Raw price distribution](images/price_distribution_raw.png) | ![Log price distribution](images/price_distribution_log.png) |
+
+The raw distribution is heavily right-skewed with a long tail out to $10,000; the log transform produces a roughly symmetric, bell-shaped target that's far easier for regression models to learn from.
+
 ## Models Compared
 
 | Model | Test R² | Test RMSE ($) | Test MAE ($) |
@@ -26,8 +34,16 @@ Kaggle "New York City Airbnb Open Data" (`AB_NYC_2019.csv`) — ~48,900 listings
 
 The final model was tuned via `RandomizedSearchCV` (20 candidates, 5-fold CV), which reduced the train/test overfitting gap from 0.18 to 0.13 while slightly *improving* test R² — a genuine generalization win, not a trade-off. It was then retrained with fewer trees (100 vs. 300) to shrink the saved pipeline from ~100MB to ~16MB for deployment, at a negligible cost to accuracy (R² 0.6517 → 0.6466).
 
+### Feature Importance
+
+![Feature importance](images/feature_importance.png)
+
+Location-related signals (`distance_to_center`, `neighbourhood_freq`, `latitude`/`longitude`) and `room_type` dominate the model's predictions, which aligns with real-world intuition — where a listing is and what kind of space it offers matter more than secondary factors like review counts.
+
 ## Application
 The Streamlit app (`app.py`) takes listing details — borough, neighbourhood, room type, minimum nights, review activity, host's listing count, and availability — and returns an estimated nightly price using the saved end-to-end pipeline (scaler + model bundled together via `joblib`).
+
+![App screenshot](images/app_screenshot.png)
 
 ## Limitations
 - MAE of ~$44 means predictions can be meaningfully off for atypical or luxury listings
@@ -48,3 +64,4 @@ streamlit run app.py
 - `airbnb_price_pipeline.pkl` — trained preprocessing + model pipeline
 - `neighbourhood_freq_map.pkl`, `neighbourhood_coords_map.pkl` — lookup tables used by the app
 - `requirements.txt` — dependencies
+- `images/` — plots and application screenshot
