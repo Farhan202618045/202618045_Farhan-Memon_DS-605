@@ -4,9 +4,13 @@ import numpy as np
 import joblib
 
 # Load saved artifacts
-pipeline = joblib.load('airbnb_price_pipeline.pkl')
-neighbourhood_freq_map = joblib.load('neighbourhood_freq_map.pkl')
-neighbourhood_coords_map = joblib.load('neighbourhood_coords_map.pkl')
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+pipeline = joblib.load(os.path.join(BASE_DIR, 'airbnb_price_pipeline.pkl'))
+neighbourhood_freq_map = joblib.load(os.path.join(BASE_DIR, 'neighbourhood_freq_map.pkl'))
+neighbourhood_coords_map = joblib.load(os.path.join(BASE_DIR, 'neighbourhood_coords_map.pkl'))
 
 # This must match X_train's column order EXACTLY (from your notebook's X.columns.tolist())
 FEATURE_ORDER = [
