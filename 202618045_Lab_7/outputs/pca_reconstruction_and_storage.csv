@@ -1,0 +1,2 @@
+Selected components,Cumulative explained variance (%),Reconstruction MSE,Reconstruction RMSE,Reconstruction PSNR (dB),Original training pixel bytes,Reduced training score bytes,Shared PCA model bytes,Scores plus PCA model bytes
+100,90.0905,314.3346560097253,17.72948549760329,23.15688095395791,3297280,256000,8325632,8581632

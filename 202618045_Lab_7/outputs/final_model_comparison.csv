@@ -1,0 +1,7 @@
+Method,Features per image,Correct predictions,Incorrect predictions,Accuracy (%)
+Raw-pixel nearest neighbor,10304,77,3,96.25
+PCA nearest neighbor,100,77,3,96.25
+KNN baseline,100,71,9,88.75
+SVM baseline,100,77,3,96.25
+Tuned KNN,100,77,3,96.25
+Tuned SVM,100,78,2,97.5
